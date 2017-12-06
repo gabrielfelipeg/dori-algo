@@ -4,22 +4,22 @@
 using namespace std;
  
 struct edge{
-    int v, flow, capacity, reverse;
+    int to, flow, capacity, reverse;
 };
  
 
 vector <edge> ladj[V];
 int level[V];
 
-void addEdge(int u, int v, int C){
+void addEdge(int u, int to, int C){
     // Forward edge : 0 flow and C capacity
-    edge a{v, 0, C, (int)ladj[v].size()};
+    edge a{to, 0, C, (int)ladj[to].size()};
 
     // Back edge : 0 flow and 0 capacity
     edge b{u, 0, 0, (int)ladj[u].size()};
 
     ladj[u].push_back(a);
-    ladj[v].push_back(b); // reverse edge
+    ladj[to].push_back(b); // reverse edge
 }
 
 bool BFS(int s, int t){
@@ -36,9 +36,9 @@ bool BFS(int s, int t){
         q.pop_front();
         
         for (auto i : ladj[u]){
-            if (level[i.v] < 0  && i.flow < i.capacity){
-                level[i.v] = level[u] + 1;
-                q.push_back(i.v);
+            if (level[i.to] < 0  && i.flow < i.capacity){
+                level[i.to] = level[u] + 1;
+                q.push_back(i.to);
             }
         }
     }
@@ -53,17 +53,17 @@ int sendFlow(int u, int flow, int t, int start[]){
         
         edge &e = ladj[u][start[u]]; 
                                      
-        if (level[e.v] == level[u]+1 && e.flow < e.capacity){
+        if (level[e.to] == level[u]+1 && e.flow < e.capacity){
 
             int curr_flow = min(flow, e.capacity - e.flow);
  
-            int temp_flow = sendFlow(e.v, curr_flow, t, start);
+            int temp_flow = sendFlow(e.to, curr_flow, t, start);
  
             if (temp_flow > 0){
                 
                 e.flow += temp_flow;
  
-                ladj[e.v][e.reverse].flow -= temp_flow;
+                ladj[e.to][e.reverse].flow -= temp_flow;
                 return temp_flow;
             }
         }
