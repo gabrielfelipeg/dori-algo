@@ -1,59 +1,27 @@
-#include<bits/stdc++.h>
+/*
+    Thanks to AmandioF for short KMP code.
+*/
+
+#include <bits/stdc++.h>
+#define MAX 1000007
 
 using namespace std;
 
-void computeLPSArray(string pat, int M, int lps[]);
+int k[MAX];
+string txt;
 
-void KMPSearch(string pat, string txt){
-   int M = pat.size();
-   int N = txt.size();
-   int lps[M];
-   computeLPSArray(pat, M, lps);
-   int i = 0;
-   int j  = 0;
-   while (i < N){
-	   if (pat[j] == txt[i]){
-		   j++;
-		   i++;
-	   }
-	   if (j == M){
-		   printf("Found a match!\n");
-		   j = lps[j - 1];
-	   }
-	   else if (i < N && pat[j] != txt[i]){
-		   if (j != 0)
-			   j = lps[j-1];
-		   else
-			   i = i+1;
-	   }
-   }
-}
-
-
-void computeLPSArray(string pat, int M, int lps[]){
-   int len = 0;
-   lps[0] = 0; 
-   int i = 1;
-   while (i < M){
-	   if (pat[i] == pat[len]){
-		   len++;
-		   lps[i] = len;
-		   i++;
-	   } else {
-		   if (len != 0){
-			   len = lps[len-1];
-		   }
-		   else{
-			   lps[i] = 0;
-			   i++;
-		   }
-	   }
-   }
+void kmp(){
+	int i = 0, j = -1;
+	k[0] = -1;
+	while(i < txt.size()){
+		while(j >= 0 && txt[i] != txt[j]) j = k[j];
+		i++; j++;
+		k[i] = j;
+	}
 }
 
 int main(){
-	string txt, pat;
-	cin >> txt >> pat;
-	KMPSearch(pat, txt);
+	cin >> txt;
+	kmp();
 	return 0;
-} 
+}

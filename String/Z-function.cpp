@@ -1,37 +1,28 @@
-#include<bits/stdc++.h>
+/*
+    Thanks to AmandioF for short Z-func code.
+*/
+
+#include <bits/stdc++.h>
+#define MAX 1000007
 
 using namespace std;
 
-void getZarr(string str, int Z[]){
-    int n = str.length();
-    int L, R, k;
- 
-    L = R = 0;
-    for (int i = 1; i < n; ++i){
-        if (i > R){
-            L = R = i;
-            while (R<n && str[R-L] == str[R]) R++;
-            Z[i] = R-L;
-            R--;
-        }
-        else{
-            k = i-L;
-            if (Z[k] < R-i+1) Z[i] = Z[k];
-            else{
-                L = i;
-                while (R<n && str[R-L] == str[R]) R++;
-                Z[i] = R-L;
-                R--;
-            }
-        }
+int z[MAX];
+string s;
+
+void func(){
+	int l = 0, r = 0;
+	for(int i = 1; i < s.size(); i++){
+		z[i] = max(0, min(z[i-l], r-i+1));
+		while(i+z[i] < s.size() && s[z[i]] == s[i+z[i]]){
+			l = i; r = i+z[i]; z[i]++;
+		}
 	}
-	Z[0] = str.size();
+	z[0] = s.size();
 }
 
 int main(){
-	string txt;
-	cin >> txt;
-	int Z[txt.size() + 1];
-	getZarr(txt, Z);
+	cin >> s;
+	func();
 	return 0;
-} 
+}
