@@ -3,21 +3,17 @@
 
 using namespace std;
  
-vector<int> primes;
-bitset<MAX> is_prime;
-
+const int N = 10000000;
+int lp[N+1];
+vector<int> pr;
 void crivo(){
-    is_prime.set();
-
-    is_prime[0] = is_prime[1] = 0;
-
-    for(int i = 2; i < MAX; i++){
-        if(is_prime[i]) {
-            primes.push_back(i);
+    for (int i=2; i<=N; ++i) {
+        if (lp[i] == 0) {
+            lp[i] = i;
+            pr.push_back (i);
         }
-        for(int j = 0; j < primes.size() && i*primes[j] < MAX; j++){
-            is_prime[i*primes[j]] = 0;
-        }
+        for (int j=0; j<(int)pr.size() && pr[j]<=lp[i] && i*pr[j]<=N; ++j)
+            lp[i * pr[j]] = pr[j];
     }
 }
 int main(){

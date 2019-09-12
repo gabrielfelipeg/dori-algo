@@ -1,7 +1,13 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
 const int mod = 7340033;
 const int root = 5;
-const int root_1 = 4404020;
+const int root_1 = 4404020; // inverse modular of root
 const int root_pw = 1 << 20;
+
+
 
 void fft(vector<int> & a, bool invert) {
     int n = a.size();
@@ -33,7 +39,7 @@ void fft(vector<int> & a, bool invert) {
     }
 
     if (invert) {
-        int n_1 = inverse(n, mod);
+        int n_1 = inverse(n, mod); // INVERSE() = return inverse modular
         for (int & x : a)
             x = (int)(1LL * x * n_1 % mod);
     }
